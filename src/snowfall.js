@@ -11,7 +11,9 @@
 		var self = this;
 		
 		// Global variables for this app.
-		var canvas, context;
+		var canvas, context, limit = 10;
+
+
 
 		// An initialisation object, lets put all our 'set-up' functions in here.
 		var initialisation = {
@@ -23,7 +25,7 @@
 				initialisation.createCanvas(initialisation.setCanvas);
 
 				// Call the draw method in the canvasMethods object.
-				canvasMethods.draw();
+				canvasMethods.handler();
 
 			},
 
@@ -61,13 +63,49 @@
 		// Creating a canvasMethod object that will keep all our canvas drawing away from the rest of the app.
 		var canvasMethods = {
 
-			// Just a test, look at that sexy hotpink circle. MMMmmmmMMM...
-			draw: function() {
+			flakes: {},
 
-				context.beginPath();
-				context.arc(400, 400, 200, 0, Math.PI * 2, false);
-				context.fillStyle = 'hotpink';
+			handler: function() {
+
+				for(var i = 0; i < limit; i++){
+
+					var index = i;
+
+					var x = Math.round(Math.random() * canvas.width);
+
+					var radius = Math.random() * 10;
+
+					canvasMethods.drawFlake(x, radius, index);
+
+				}
+
+				console.log(canvasMethods.flakes);
+
+			},
+
+			drawFlake: function(x, radius, index) {
+
+				context.clearRect(0, 0, canvas.width, canvas.height);
+
+				context.arc(
+					x,
+					0,
+					radius,
+					0,
+					Math.PI * 2,
+					true
+				);
+
+				context.fillstyle = 'black';
 				context.fill();
+
+				canvasMethods.flakes[index] = {
+
+					x: x, 
+					radius: radius,
+					y: 0
+
+				};
 
 			}
 
