@@ -13,8 +13,6 @@
 		// Global variables for this app.
 		var canvas, context, limit = 10;
 
-
-
 		// An initialisation object, lets put all our 'set-up' functions in here.
 		var initialisation = {
 
@@ -67,7 +65,6 @@
 
 			handler: function() {
 
-
 				for(var i = 0; i < limit; i++){
 
 					var index = i,
@@ -80,6 +77,7 @@
 				
 				setInterval(function() {
 				
+					// Clear the canvas before redrawing all the flakes in there new positions.
 					context.clearRect(0, 0, canvas.width, canvas.height);
 					
 					canvasMethods.flakeDrop();
@@ -123,6 +121,7 @@
 
 					canvasMethods.drawFlake(
 
+						// Make the adjustments to the flakes positons here! - You can probably split this up into functions that get a number for you.
 						flake.x,
 						flake.y +=1,
 						flake.radius,
