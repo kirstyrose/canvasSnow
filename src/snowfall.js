@@ -67,29 +67,33 @@
 
 			handler: function() {
 
+
 				for(var i = 0; i < limit; i++){
 
-					var index = i;
+					var index = i,
+						x = Math.round(Math.random() * canvas.width),
+						radius = Math.round(Math.random() * 10);
 
-					var x = Math.round(Math.random() * canvas.width);
-
-					var radius = Math.random() * 10;
-
-					canvasMethods.drawFlake(x, radius, index);
+					canvasMethods.drawFlake(x, 0, radius, index);
 
 				}
+				
+				setInterval(function() {
+				
+					context.clearRect(0, 0, canvas.width, canvas.height);
+					
+					canvasMethods.flakeDrop();
 
-				console.log(canvasMethods.flakes);
+				}, 10);
 
 			},
 
-			drawFlake: function(x, radius, index) {
+			drawFlake: function(x, y, radius, index) {
 
-				context.clearRect(0, 0, canvas.width, canvas.height);
-
+				context.beginPath();
 				context.arc(
 					x,
-					0,
+					y,
 					radius,
 					0,
 					Math.PI * 2,
@@ -102,10 +106,31 @@
 				canvasMethods.flakes[index] = {
 
 					x: x, 
+					y: y,
 					radius: radius,
-					y: 0
 
 				};
+
+			},
+
+			// This makes the snowflaskes fall, by reading the object and getting the data above then redrawing!
+			flakeDrop: function() {
+
+				// For each entry in the flakes object, do it for each one...!
+				for(var entry in canvasMethods.flakes) {
+
+					var flake = canvasMethods.flakes[entry];
+
+					canvasMethods.drawFlake(
+
+						flake.x,
+						flake.y +=1,
+						flake.radius,
+						entry
+
+					);
+
+				}
 
 			}
 
