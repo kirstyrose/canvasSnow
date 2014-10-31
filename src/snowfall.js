@@ -1,6 +1,6 @@
 ;(function() {
 
-	// Let be strict! - It will help flag up bad practices.
+	// Lets be strict! - It will help flag up bad practices.
 	'use strict';
 
 	// Set a version for future tracking/releases.
@@ -11,7 +11,7 @@
 		var self = this;
 		
 		// Global variables for this app.
-		var canvas, context, limit = 10;
+		var canvas, context, limit = 50;
 
 		// An initialisation object, lets put all our 'set-up' functions in here.
 		var initialisation = {
@@ -65,24 +65,30 @@
 
 			handler: function() {
 
-				for(var i = 0; i < limit; i++){
+				var i = 0;
+
+				setInterval(function() {
+
+					i++;
+
+					if(i >= limit) return;
 
 					var index = i,
 						x = Math.round(Math.random() * canvas.width),
-						radius = Math.round(Math.random() * 10);
+						radius = Math.round(Math.random() * 100);
 
-					canvasMethods.drawFlake(x, 0, radius, index);
-
-				}
-				
-				setInterval(function() {
-				
-					// Clear the canvas before redrawing all the flakes in there new positions.
-					context.clearRect(0, 0, canvas.width, canvas.height);
+					canvasMethods.drawFlake(x, -10, radius, index);
 					
+				}, 300);
+				
+
+				window.fall = requestAnimationFrame(function(){
+
+					context.clearRect(0, 0, canvas.width, canvas.height);
+
 					canvasMethods.flakeDrop();
 
-				}, 10);
+				})
 
 			},
 
@@ -122,8 +128,8 @@
 					canvasMethods.drawFlake(
 
 						// Make the adjustments to the flakes positons here! - You can probably split this up into functions that get a number for you.
-						flake.x,
-						flake.y +=1,
+						canvasMethods.calcXPos(flake),
+						canvasMethods.calcYPos(flake),
 						flake.radius,
 						entry
 
@@ -131,7 +137,56 @@
 
 				}
 
+				window.fall = requestAnimationFrame(function(){
+
+					context.clearRect(0, 0, canvas.width, canvas.height);
+
+					canvasMethods.flakeDrop();
+
+				})
+
+			}, 
+
+			calcXPos: function(flake) {
+
+
+				if(flake.x > (canvas.width + flake.radius)) {
+
+					return flake.radius;
+
+				} else if(flake.x < (-flake.radius)) {
+
+
+					return (canvas.width + flake.radius);
+
+				} else {
+
+
+					return flake.x -5;
+
+				}
+
+				
+
+
+
+			}, 
+
+			calcYPos: function(flake) {
+
+				if(flake.y > (canvas.height + flake.radius)) {
+
+					return -flake.radius;
+
+				} else {
+
+					return flake.y +=(flake.radius / 5);
+					
+				}
+				
 			}
+
+			//+=(Math.random() * -1)
 
 		}
 
