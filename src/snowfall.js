@@ -4,11 +4,11 @@
 
 	var version = '0.1';
 
-	var snowFall = function() {
+	var snowFall = function(options) {
 
 		var self = this;
 		
-		var canvas, context, limit = 50;
+		var canvas, context, limit = options.limit;
 
 		var initialisation = {
 
@@ -23,13 +23,14 @@
 			createCanvas: function(callback) {
 
 				var canvas = document.createElement('canvas');
-					canvas.id = 'snowFall';
+					canvas.id = options.id;
 					canvas.height = document.documentElement.clientHeight;
 					canvas.width = document.documentElement.clientWidth;
 					canvas.style.position = 'absolute';
+					canvas.style.pointerEvents = 'none';
 					canvas.style.top = 0;
 					canvas.style.left = 0;
-					canvas.style.zIndex = -1;
+					canvas.style.zIndex = 100;
 
 				document.body.appendChild(canvas);
 
@@ -39,7 +40,7 @@
 
 			setCanvas: function() {
 
-				canvas = document.getElementById('snowFall');
+				canvas = document.getElementById(options.id);
 				context = canvas.getContext('2d');
 
 			}
@@ -62,11 +63,11 @@
 
 					var index = i,
 						x = Math.round(Math.random() * canvas.width),
-						radius = Math.round(Math.random() * 6);
+						radius = Math.round(Math.random() * options.maxRadius);
 
 					canvasMethods.drawFlake(x, -10, radius, index);
 					
-				}, 300);
+				}, (options.spawnRate * 100));
 				
 
 				window.fall = requestAnimationFrame(function(){
@@ -92,8 +93,8 @@
 				);
 
 				var gradient = context.createRadialGradient(10, 0, 0, 850, 50, 1000);
-					gradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
-					gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
+					gradient.addColorStop(0, 'rgba('+options.colour+', 0.8)');
+					gradient.addColorStop(1, 'rgba('+options.colour+', 0.0)');
 
 				context.fillStyle = gradient;
 				context.fill();
@@ -150,7 +151,7 @@
 				} else {
 
 
-					return flake.x +0.5;
+					return flake.x +options.windPower;
 
 				}
 
@@ -164,7 +165,7 @@
 
 				} else {
 
-					return flake.y +=(flake.radius / 8);
+					return flake.y +=(flake.radius / (8 / options.gravity));
 					
 				}
 				
@@ -178,7 +179,17 @@
 
 	window.onload = function() {
 
-		window.snowFall = new snowFall();
+		window.snowFall = new snowFall({
+
+			spawnRate: 2,
+			limit: 100,
+			id : 'canvasSnow',
+			maxRadius : 3,
+			windPower : 0.25,
+			gravity : 2,
+			colour: '0, 0, 0'
+
+		});
 
 	};
 
