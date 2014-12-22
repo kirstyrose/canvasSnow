@@ -63,7 +63,7 @@
 
 					var index = i,
 						x = Math.round(Math.random() * canvas.width),
-						radius = Math.round(Math.random() * options.maxRadius);
+						radius = Math.random() * options.maxRadius;
 
 					canvasMethods.drawFlake(x, -10, radius, index);
 					
@@ -151,7 +151,7 @@
 				} else {
 
 
-					return flake.x +options.windPower;
+					return flake.x +(options.windPower / flake.radius) + options.windPower;
 
 				}
 
@@ -184,8 +184,8 @@
 			spawnRate: 2,
 			limit: 100,
 			id : 'canvasSnow',
-			maxRadius : 3,
-			windPower : 0.25,
+			maxRadius : 4,
+			windPower : 0.2,
 			gravity : 2,
 			colour: '0, 0, 0'
 
